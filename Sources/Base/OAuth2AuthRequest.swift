@@ -83,13 +83,15 @@ open class OAuth2AuthRequest {
 	/// Query parameters to use with the request.
 	open var params = OAuth2RequestParams()
 	
-	
+	private var allowInsecure: Bool
+
 	/**
 	Designated initializer. Neither URL nor method can later be changed.
 	*/
-	public init(url: URL, method: OAuth2HTTPMethod = .POST) {
+	public init(url: URL, method: OAuth2HTTPMethod = .POST, allowInsecure: Bool = false) {
 		self.url = url
 		self.method = method
+		self.allowInsecure = allowInsecure
 	}
 	
 	
@@ -145,7 +147,10 @@ open class OAuth2AuthRequest {
 	*/
 	func asURLComponents() throws -> URLComponents {
 		let comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
-		guard var components = comp, "https" == components.scheme else {
+		guard var components = comp else {
+			throw OAuth2Error.invalidRequest("Bad url: \(url)")
+		}
+		if !allowInsecure && components.scheme != "https" {
 			throw OAuth2Error.notUsingTLS
 		}
 		if .GET == method && params.count > 0 {

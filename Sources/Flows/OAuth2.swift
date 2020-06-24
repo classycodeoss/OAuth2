@@ -272,7 +272,7 @@ open class OAuth2: OAuth2Base {
 			throw OAuth2Error.noClientId
 		}
 		
-		let req = OAuth2AuthRequest(url: clientConfig.authorizeURL, method: .GET)
+		let req = OAuth2AuthRequest(url: clientConfig.authorizeURL, method: .GET, allowInsecure: self.allowInsecure)
 		req.params["redirect_uri"] = redirect
 		req.params["state"] = context.state
 		if let clientId = clientId {

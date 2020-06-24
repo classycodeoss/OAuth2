@@ -42,6 +42,9 @@ open class OAuth2Requestable {
 			logger = verbose ? OAuth2DebugLogger() : nil
 		}
 	}
+
+	/// Set to true to allow non-HTTPS urls for development
+	open var allowInsecure = false
 	
 	/// The logger being used. Auto-assigned to a debug logger if you set `verbose` to true or false.
 	open var logger: OAuth2Logger?
